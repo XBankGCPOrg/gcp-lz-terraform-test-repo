@@ -1,0 +1,28 @@
+name: 03-gke-autopilot-non-production
+on:
+  workflow_call:
+  push:
+    branches:
+      - main
+    paths:
+      - '05-project-vending/**'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '05-project-vending/**'
+
+jobs:
+  gke-autopilot-non-production:
+    permissions: # <- this section is needed for workload identity
+      contents: 'write'
+      id-token: 'write'
+      issues: write
+      pull-requests: write
+      statuses: write 
+    uses: ./.github/workflows/pipeline_template.yaml
+    secrets: inherit
+    with:
+      working-directory: 05-project-vending
+      workload-identity-provider: projects/271270271496/locations/global/workloadIdentityPools/github-b-prj-jigsaw-pool/providers/github-b-prj-jigsaw-provider # to be provided
+      workload-identity-serviceaccount: sa-prj-jigsaw@prj-b-lz-seed-er1w.iam.gserviceaccount.com                                                               # to be provided

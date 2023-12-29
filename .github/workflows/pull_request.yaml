@@ -1,0 +1,40 @@
+name: pr
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'yaml_update/**'
+
+jobs:
+  precheck:
+    name: commit and push
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Modify files
+      id: modify
+      working-directory: ./yaml_update
+      run: |
+        echo "::set-output name=api_added::false"
+        chmod +x ../.github/api_enable.sh
+        output=$(../.github/api_enable.sh)
+        echo $output
+        if [ $output == "api_added=true" ];then
+        echo "::set-output name=api_added::true"
+        git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git config --local user.name "github-actions[bot]"
+        git commit -a -m "Add changes"
+        git push --force -u origin ${GITHUB_HEAD_REF}
+        fi
+
+  terraform:
+    name: Terraform iac
+    needs: [precheck]
+    runs-on: ubuntu-latest
+    steps:
+    - name: tf plan
+      run: echo "Running Plan"

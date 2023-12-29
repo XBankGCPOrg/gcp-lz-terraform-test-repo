@@ -1,0 +1,35 @@
+organizations: 
+- name: organizations
+  iamPolicy:
+    bindings:
+    - role: organization/org.adminCustom
+      members:
+      - group:gcp-psxbank-orgadmin@psxbank.gcp-foundation.com
+    - role: roles/resourcemanager.organizationAdmin
+      members:
+      - group:gcp-psxbank-orgadmin@psxbank.gcp-foundation.com
+  roles:
+  - name: org.adminCustom
+    title: Custom Organization Administrators
+    description: Custom Role for Organization Administrators
+    includedPermissions:
+    - resourcemanager.organizations.get
+    - resourcemanager.organizations.getIamPolicy
+    - resourcemanager.folders.get
+    - resourcemanager.folders.getIamPolicy
+    - resourcemanager.folders.list
+    - resourcemanager.projects.get
+    - resourcemanager.projects.getIamPolicy
+    - resourcemanager.projects.list
+
+
+folders: 
+- name: fldr-sandbox
+  iamPolicy:
+    bindings:
+    - role: roles/resourcemanager.folderAdmin
+      members:
+      - group:gcp-psxbank-orgadmin@psxbank.gcp-foundation.com
+projects: []
+
+service_accounts: []

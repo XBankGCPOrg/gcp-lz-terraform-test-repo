@@ -1,0 +1,134 @@
+name : ""
+on:
+  workflow_call:
+    inputs:
+      working-directory:
+        required: true
+        type: string
+      workload-identity-provider:
+        required: true
+        type: string
+      workload-identity-serviceaccount:
+        required: true
+        type: string
+jobs:
+  # tflint:
+  #   name: tflint
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - uses: actions/checkout@v2
+
+  #   - name: Terraform Linting
+  #     uses: docker://github/super-linter:latest
+  #     env:
+  #       VALIDATE_TERRAFORM_TERRASCAN: true
+  #       VALIDATE_TERRAFORM_FMT: true
+  #       VALIDATE_TERRAFORM_TFLINT: true
+  
+  precheck:
+    name: precheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.8
+      - name: Test with Checkov
+        id: checkov
+        uses: bridgecrewio/checkov-action@master
+        with:
+          directory: "./${{ inputs.working-directory }}"
+          config_file: ./.github/.checkov.config.yaml
+      # - name: tfsec
+      #   uses: aquasecurity/tfsec-action@v1.0.0
+      #   with:
+      #     working_directory: "./${{ inputs.working-directory }}"
+      - name: Run TruffleHog Scan
+        continue-on-error: true
+        run: |
+          python -m pip install --upgrade pip
+          pip install truffleHog3
+          trufflehog3 --config=./.github/.trufflehog-action.config.yaml --rules=./.github/.trufflehog-action.rule.yaml
+      
+  # tfsec:
+  #   name: tfsec
+  #   runs-on: ubuntu-latest
+  #   needs: [checkov]
+  #   steps:
+  #     - name: Clone repo
+  #       uses: actions/checkout@master
+  #     - name: tfsec
+  #       uses: aquasecurity/tfsec-action@v1.0.0
+  #       with:
+  #         working_directory: "./${{ inputs.working-directory }}"
+
+
+  terraform:
+    name: terraform iac - with workload identity
+    needs: [precheck]
+    if: needs.precheck.result == 'success'
+    runs-on: ubuntu-latest
+    permissions: # <- this section is needed for workload identity
+      contents: 'read'
+      id-token: 'write'
+    steps:
+      - uses: actions/checkout@v3
+      - name: Authenticate to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v0
+        with:
+          #replace project id, provider id and pool id here
+          #workload_identity_provider: projects/<project-id>/locations/global/workloadIdentityPools/<pool-id>/providers/<provider-id>
+          workload_identity_provider: ${{ inputs.workload-identity-provider }}
+#          service_account: <org-terrafomr@sa>
+#          replace service account here
+          service_account: ${{ inputs.workload-identity-serviceaccount }}
+          access_token_lifetime: 3600s
+
+      - uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.6.5"
+
+      - name: Terraform Init
+        id: fmt
+        run: terraform init
+        working-directory: "./${{ inputs.working-directory }}"
+
+      - name: Terraform fmt
+        id: init
+        run: terraform fmt -check
+        working-directory: "./${{ inputs.working-directory }}"
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color
+        working-directory: "./${{ inputs.working-directory }}"
+
+      - name: Terraform Plan
+        id: plan
+        run: |
+            terraform plan --out ./tfplan -no-color
+            terraform show -json ./tfplan > ./tfplan.json
+        working-directory: "./${{ inputs.working-directory }}"
+
+      - name: Checkov for label check
+        uses: bridgecrewio/checkov-action@master
+        id: checkov-label
+        with:
+          file: "./${{ inputs.working-directory }}/tfplan.json"
+          external_checks_dirs: ./.github/checkov-custom-checks
+          check: CKV_CUSTOM_1
+
+
+      - name: Terraform Apply
+        id: apply
+        if: contains(github.event.head_commit.message, 'terraform apply')
+        run: terraform apply -auto-approve
+        working-directory: "./${{ inputs.working-directory }}"
+
+      - name: Terraform Destroy
+        id: destroy
+        if: contains(github.event.head_commit.message, 'terraform destroy')
+        run: terraform destroy -auto-approve
+        working-directory: "./${{ inputs.working-directory }}"

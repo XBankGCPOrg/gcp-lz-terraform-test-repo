@@ -1,0 +1,17 @@
+name: Terratest
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+  workflow_dispatch:
+jobs:
+  management:
+    permissions: # <- this section is needed for workload identity
+      contents: 'read'
+      id-token: 'write'
+    uses: ./.github/workflows/test_execution_pipeline.yaml
+    with:
+      workload-identity-provider: projects/1084526730958/locations/global/workloadIdentityPools/github-b-control-pool/providers/github-b-control-provider
+      workload-identity-serviceaccount: sa-control@prj-lz-seed-t99o.iam.gserviceaccount.com
+

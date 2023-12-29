@@ -1,0 +1,116 @@
+folders:
+- displayName: fldr-common
+  parent: null
+- displayName: fldr-sandbox
+  parent: null
+- displayName: fldr-non-production
+  parent: null
+- displayName: fldr-production
+  parent: null
+- displayName: fldr-bu1-n
+  parent: fldr-non-production
+- displayName: fldr-bu2-n
+  parent: fldr-non-production
+- displayName: fldr-bu1-p
+  parent: fldr-production
+- displayName: fldr-bu2-p
+  parent: fldr-production
+- displayName: fldr-gke-cluster-poc
+  parent: fldr-non-production
+- displayName: fldr-terratest-poc
+  parent: null
+
+
+projects:
+- displayName: prj-c-logging
+  parent: fldr-common
+  lienReason: Critical logging project as part of the GCP Landing Zone Foundation   
+  labels: 
+    env: non-prod
+    cmdb: 1 
+    
+  services: 
+    - compute.googleapis.com              # - Enabled by google by default
+    - oslogin.googleapis.com              # - Enabled by google by default
+    - cloudkms.googleapis.com             # - For CMEK keys
+    - bigquery.googleapis.com             # - For logging to bigquery
+    - bigquerymigration.googleapis.com    # - Enabled by google as dependency
+    - bigquerystorage.googleapis.com      # - Enabled by google as dependency
+  
+- displayName: prj-c-billing
+  parent: fldr-common
+  lienReason: Critical billing project as part of the GCP Landing Zone Foundation 
+  labels: 
+    env: non-prod
+    cmdb: 1 
+  services: 
+    - compute.googleapis.com              # - Enabled by google by default
+    - oslogin.googleapis.com              # - Enabled by google by default
+    - bigquery.googleapis.com             # - For billing to bigquery
+- displayName: prj-c-security
+  parent: fldr-common
+  lienReason: Critical security project as part of the GCP Landing Zone Foundation 
+  labels: 
+    env: non-prod
+    cmdb: 1 
+  services: 
+    - compute.googleapis.com              # - Enabled by google by default
+    - oslogin.googleapis.com              # - Enabled by google by default
+    - cloudkms.googleapis.com             # - For CMEK keys
+    - storage.googleapis.com              # - For cloud functions
+    - artifactregistry.googleapis.com     # - For cloud functions
+    - pubsub.googleapis.com               # - For cloud functions
+    - cloudbuild.googleapis.com           # - For cloud functions
+    - cloudfunctions.googleapis.com       # - For guardrails
+- displayName: prj-c-platformtools
+  parent: fldr-common
+  lienReason: Critical security project as part of the GCP Landing Zone Foundation 
+  labels: 
+    env: non-prod
+    cmdb: 1 
+  services: 
+    - compute.googleapis.com              # - Enabled by google by default
+    - oslogin.googleapis.com              # - Enabled by google by default
+    - cloudkms.googleapis.com             # - For CMEK keys
+    - artifactregistry.googleapis.com     # - For cloud functions
+- displayName: prj-c-platformtools-ar
+  parent: fldr-common
+  lienReason: Critical security project as part of the GCP Landing Zone Foundation 
+  labels: 
+    env: non-prod
+    cmdb: 1 
+  services: 
+    - compute.googleapis.com              # - Enabled by google by default
+    - oslogin.googleapis.com              # - Enabled by google by default
+    - cloudkms.googleapis.com             # - For CMEK keys
+    - artifactregistry.googleapis.com     # - For cloud functions
+- displayName: prj-c-networking
+  parent: fldr-common
+  labels: 
+    env: non-prod
+    cmdb: 1 
+  services: []
+  imported_project_id: prj-c-networking-405911
+
+
+
+
+- displayName: prj-label-test
+  parent: fldr-terratest-poc
+  labels: 
+    env: non-prod
+    cmdb: 1 
+  services: 
+    - compute.googleapis.com              # - Enabled by google by default
+    - oslogin.googleapis.com              # - Enabled by google by default
+    - container.googleapis.com            # - Enabled for GKE
+
+- displayName: prj-n-budget-test
+  parent: fldr-sandbox
+  labels: 
+    env: non-prod
+    cmdb: 1 
+  services: 
+    - compute.googleapis.com              # - Enabled by google by default
+    - oslogin.googleapis.com              # - Enabled by google by default
+    - container.googleapis.com            # - Enabled for GKE

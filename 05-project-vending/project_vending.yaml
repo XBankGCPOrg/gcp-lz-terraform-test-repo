@@ -1,0 +1,43 @@
+# ---
+# PROJECT: test-repo-with-automation
+# OWNER: narayan-khanna
+# CMDB_ID: 2
+# FOLDER_NAME: COMMON
+
+repositories:
+  terraform-github-first:
+    visibility: "public"
+    description: "This is the first project."
+    auto_init: true
+    homepage_url: "https://example.com/project1"
+    has_projects: true
+    has_issues: true
+    has_wiki: true
+    is_template: false
+    allow_merge_commit: true
+    allow_squash_merge: true
+    allow_rebase_merge: false
+    allow_auto_merge: false
+    delete_branch_on_merge: true
+    has_downloads: false
+    gitignore_template: "Node"
+    license_template: "mit"
+    archived: false
+    archived_on_destroy: false
+    topics:
+      - "terraform"
+      - "github"
+    vulnerability_alert: true
+    ignore_vulnerability_alerts_during_read: false
+    pages:
+      - cname: "custom-domain.example.com"
+        source:
+          - branch: "main"
+            path: "/"
+      - cname: "another-domain.example.com"
+        source:
+          - branch: "develop"
+            path: "/docs"
+    template:
+      - owner: "organization"
+        repository: "template-repo"

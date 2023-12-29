@@ -1,0 +1,19 @@
+name: 01-management
+on:
+  workflow_call:
+  push:
+    branches:
+      - main
+    paths:
+      - '01-management/**'
+jobs:
+  management:
+    permissions: # <- this section is needed for workload identity
+      contents: 'read'
+      id-token: 'write'
+    uses: ./.github/workflows/pipeline_template.yaml
+    with:
+      working-directory: 01-management
+      workload-identity-provider: projects/1084526730958/locations/global/workloadIdentityPools/github-b-control-pool/providers/github-b-control-provider
+      workload-identity-serviceaccount: sa-control@prj-lz-seed-t99o.iam.gserviceaccount.com
+

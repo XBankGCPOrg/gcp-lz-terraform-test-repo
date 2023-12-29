@@ -1,0 +1,28 @@
+depth: 50
+# since: d96913bf1598dae0efc01f895febd1539621401b
+no_entropy: True # Enable entropy matching
+no_pattern: False
+exclude:
+  # - path: - ^tests/ # Exclude the 'tests' directory (message: "Exclude the tests directory")
+  - message: Binaries
+    paths:
+      - docs/assets/**
+      - docs/diagrams-source/**
+  - message: Trufflehog rules file contains regexes which might trigger the scanner
+    paths:
+      - .github/trufflehog-action-config.yaml
+      - .github/trufflehog-action-rule.yaml
+      - .github/.trufflehog-action.config.yaml
+      - .github/.trufflehog-action.rule.yaml
+  - message: Ignore private Github workaround
+    pattern: github.com/osttra".insteadOf
+    paths:
+      - .github/**
+  - message: Old unused token
+    pattern: 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
+    paths:
+      - .github/**
+  - message: Old unused token
+    pattern: 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
+    paths:
+      - .github/**

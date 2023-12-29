@@ -1,0 +1,146 @@
+name: Clone and Push
+
+on:
+  workflow_dispatch:
+    inputs:
+      input_yaml_file:
+        description: 'Yaml file name 05-project-vending/project_vending.yaml'
+        required: true
+
+jobs:
+  clone_and_push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+    - name: Yaml decode 
+      run: |
+        git clone https://narayan-khanna:${{ secrets.GIT_VENDING_NEW }}@github.com/XBankGCPOrg/gcp-lz-foundations.git
+        cd gcp-lz-foundations
+        yaml_data=$(cat "05-project-vending/repo-creation/github/${{ github.event.inputs.input_yaml_file }}")
+        BASE_NAME="$(echo "$yaml_data" | grep 'PROJECT' | awk '{print $2}')"
+        OWNER="$(echo "$yaml_data" | grep 'OWNER' | awk '{print $2}')"
+        CMDB_ID="$(echo "$yaml_data" | grep 'CMDB_ID' | awk '{print $2}')"
+        FOLDER_NAME="$(echo "$yaml_data" | grep 'FOLDER_NAME' | awk '{print $2}')"
+        # NEW_REPO_NAME="gcp-lz-${BASE_NAME}"
+        # PROJECT_NAME_PROD="prj-p-${BASE_NAME}"
+        # SERVICE_ACCOUNT_NAME="prj-${BASE_NAME}" 
+
+        # echo "NEW_REPO_NAME=${NEW_REPO_NAME}" >> $GITHUB_ENV
+        # echo "PROJECT_NAME_PROD=${PROJECT_NAME_PROD}" >> $GITHUB_ENV
+        # echo "SERVICE_ACCOUNT_NAME=${SERVICE_ACCOUNT_NAME}" >> $GITHUB_ENV
+        # echo "BASE_NAME=${BASE_NAME}" >> $GITHUB_ENV
+        # echo "OWNER=${OWNER}" >> $GITHUB_ENV
+        # echo "FOLDER_NAME=${FOLDER_NAME}" >> $GITHUB_ENV
+        # echo "CMDB_ID=${CMDB_ID}" >> $GITHUB_ENV
+        
+    - uses: actions/checkout@v3
+
+    - uses: hashicorp/setup-terraform@v3
+      with:
+        terraform_version: "1.6.5"
+
+    - name: Create new repository
+      id: repo
+      env:
+        TF_VAR_github_pat_token: ${{ secrets.GIT_PAT_TOKEN }}
+      run: |
+        terraform init
+        terraform fmt -check
+        terraform validate -no-color
+        terraform plan -var "github_username=${{ github.actor }}"  --out ./tfplan -no-color 
+        terraform show -json ./tfplan > ./tfplan.json
+        terraform apply -auto-approve -var "github_username=${{ github.actor }}"
+        NEW_REPO_NAME=$(terraform output -json repo_names)
+        NEW_REPO_NAME=$(echo $NEW_REPO_NAME | grep -oP '"\K[^"]+' | awk 'NR==1')
+        echo "NEW_REPO_NAME=${NEW_REPO_NAME}" >> $GITHUB_ENV
+        SERVICE_ACCOUNT_NAME="prj-${NEW_REPO_NAME}"
+        echo "SERVICE_ACCOUNT_NAME=${SERVICE_ACCOUNT_NAME}" >> $GITHUB_ENV
+      working-directory: "05-project-vending/repo-creation/github"
+
+  
+    - name: Checkout template repository
+      uses: actions/checkout@v3
+      with:
+        repository: XBankGCPOrg/gcp-lz-template
+        ref: main
+        token: ${{ secrets.GIT_VENDING_NEW }}
+
+    - name: List contents
+      run: |
+        mkdir ../tmp
+        cp -r * ../tmp
+        cd ..
+        git clone https://narayan-khanna:${{ secrets.GIT_VENDING_NEW }}@github.com/XBankGCPOrg/${NEW_REPO_NAME}.git
+        cp -r ./tmp/* ./${NEW_REPO_NAME}/
+        # Navigate to the new repository
+        cd ./${NEW_REPO_NAME}/
+        git status
+        # Commit and push changes
+        git add .
+        git config user.email "narayankhanna7@gmail.com"
+        git config user.name "narayan-khanna"
+        git status
+        git commit -m "Initial commit"
+        git push
+
+    - name: Updating Bootstrap Repo
+      env:
+        GH_TOKEN: ${{ secrets.GIT_VENDING_NEW }}
+      run: |
+        git clone https://narayan-khanna:${{ secrets.GIT_VENDING_NEW }}@github.com/XBankGCPOrg/gcp-lz-bootstrap.git
+        cd gcp-lz-bootstrap
+        ls -ltra
+        git checkout -b add-$SERVICE_ACCOUNT_NAME
+        cat <<EOF > $SERVICE_ACCOUNT_NAME.yaml
+        serviceAccounts:
+          displayName: Project ${BASE_NAME} pipeline Service Account
+          description: Service Account for the Project ${BASE_NAME} pipeline
+          repository: XBankGCPOrg/${NEW_REPO_NAME}
+          billingUser: false
+          billingAdmin: false
+          tfstateBucketName: tfstate-${SERVICE_ACCOUNT_NAME}
+        EOF
+        git add ${SERVICE_ACCOUNT_NAME}.yaml
+        git config user.email "narayankhanna7@gmail.com"
+        git config user.name "narayan-khanna"
+        git commit -m "Add ${SERVICE_ACCOUNT_NAME}.yaml"
+        git push --force --set-upstream origin add-$SERVICE_ACCOUNT_NAME
+        gh pr create --base main --head add-$SERVICE_ACCOUNT_NAME --title "Merge add-$SERVICE_ACCOUNT_NAME to main" --body "Automated merge from add-$SERVICE_ACCOUNT_NAME"
+
+    - name: Updating Foundation Repo
+      env:
+        GH_TOKEN: ${{ secrets.GIT_VENDING_NEW }}
+      run: |
+        git clone https://narayan-khanna:${{ secrets.GIT_VENDING_NEW }}@github.com/XBankGCPOrg/gcp-lz-foundations.git
+        cd gcp-lz-foundations
+        ls -ltra
+        git checkout -b add-$SERVICE_ACCOUNT_NAME
+        PROJECT_FOLDER_NAME="${FOLDER_NAME}"
+        CMB_ID="${CMDB_ID}"
+        OWNER="${OWNER}"
+        cat <<EOF > ${PROJECT_NAME_PROD}.yaml
+        projectSpec:
+          parent: ${PROJECT_FOLDER_NAME}
+          labels:
+            environment: production
+            application_name: lz
+            cmdb_id: ${CMB_ID}
+            classification: confidential
+            owner: ${OWNER}
+          services: []
+          serviceAccounts: []
+        projectIAMBinding:
+          - roles:
+            - roles/owner
+            members:
+            - serviceAccount:sa-${SERVICE_NAME}@${SEED_PROJECT_ID}.iam.gserviceaccount.com::${PROJECT_NAME_PROD}
+        EOF
+        git add ${PROJECT_NAME_PROD}.yaml
+        git config user.email "narayankhanna7@gmail.com"
+        git config user.name "narayan-khanna"
+        git commit -m "Add ${PROJECT_NAME_PROD}.yaml"
+        git push --force --set-upstream origin add-$SERVICE_ACCOUNT_NAME
+        gh pr create --base main --head add-$SERVICE_ACCOUNT_NAME --title "Merge add-$SERVICE_ACCOUNT_NAME to main" --body "Automated merge from add-$SERVICE_ACCOUNT_NAME"

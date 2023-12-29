@@ -1,0 +1,128 @@
+budget_config:
+- billing_account: "01EBA6-74BB59-078C79"
+  projects:
+    - "prj-s-my-test-project-85526"
+    
+   
+  create_budget: true
+  display_name: "prj-s-my-test-project-85526-testbudget"
+  project_prefix: "prj-s" # Add project_prefix here
+  alert_spent_percents:
+    - 50
+    - 70
+  alert_spend_basis: "CURRENT_SPEND"
+  currency_code: "USD"
+  budget_amount_sandbox: "500"
+  budget_amount_default: "5000"
+  credit_types_treatment: "INCLUDE_ALL_CREDITS"
+  labels:
+    label1: ""
+    #label2: ""
+  services: []  # Add an empty list for services if not applicable
+  calendar_period: ""  # Add empty string for calendar period if not applicable
+  custom_period_start_date: ""  # Add empty string if not applicable
+  custom_period_end_date: ""  # Add empty string if not applicable
+  alert_pubsub_topic: ""  # Add empty string if not applicable
+  monitoring_notification_channels: []  # Add an empty list if not applicable
+
+
+
+- billing_account: "01EBA6-74BB59-078C79"
+  projects:
+    - "weighty-tensor-406407"
+    
+   
+  create_budget: true
+  display_name: "weighty-tensor-406407-testbudget"
+  project_prefix: "prj-s" # Add project_prefix here
+  alert_spent_percents:
+    - 50
+    - 70
+  alert_spend_basis: "CURRENT_SPEND"
+  currency_code: "USD"
+  budget_amount_sandbox: "500"
+  budget_amount_default: "5000"
+  credit_types_treatment: "INCLUDE_ALL_CREDITS"
+  labels:
+    label1: ""
+    #label2: ""
+  services: []  # Add an empty list for services if not applicable
+  calendar_period: ""  # Add empty string for calendar period if not applicable
+  custom_period_start_date: ""  # Add empty string if not applicable
+  custom_period_end_date: ""  # Add empty string if not applicable
+  alert_pubsub_topic: ""  # Add empty string if not applicable
+  monitoring_notification_channels: []  # Add an empty list if not applicable
+
+- billing_account: "01EBA6-74BB59-078C79"
+  projects:
+    - "prj-n-budget-test-8yfy"
+    
+   
+  create_budget: true
+  display_name: "prj-n-budget-test-8yfy-testbudget"
+  project_prefix: "prj-s" # Add project_prefix here
+  alert_spent_percents:
+    - 50
+    - 70
+  alert_spend_basis: "CURRENT_SPEND"
+  currency_code: "USD"
+  budget_amount_sandbox: "500"
+  budget_amount_default: "5000"
+  credit_types_treatment: "INCLUDE_ALL_CREDITS"
+  labels:
+    label1: ""
+    #label2: ""
+  services: []  # Add an empty list for services if not applicable
+  calendar_period: ""  # Add empty string for calendar period if not applicable
+  custom_period_start_date: ""  # Add empty string if not applicable
+  custom_period_end_date: ""  # Add empty string if not applicable
+  alert_pubsub_topic: ""  # Add empty string if not applicable
+  monitoring_notification_channels: []  # Add an empty list if not applicable
+# - billing_account: "01EBA6-74BB59-078C79"
+#   projects:
+#     - "prj-s-my-test-project-85526"
+#   create_budget: true
+#   display_name: "prj-s-my test Project 85526"
+#   project_prefix: "prj-s-" # Add project_prefix here
+#   alert_spent_percents:
+#     - 60
+#     - 80
+#   alert_spend_basis: "CURRENT_SPEND"
+#   currency_code: "USD"
+#   budget_amount_sandbox: "500"
+#   budget_amount_default: "5000"
+#   credit_types_treatment: "INCLUDE_ALL_CREDITS"
+#   labels:
+#     label3: ""
+#     #label4: ""
+#   services: []  # Add an empty list for services if not applicable
+#   calendar_period: ""  # Add empty string for calendar period if not applicable
+#   custom_period_start_date: ""  # Add empty string if not applicable
+#   custom_period_end_date: ""  # Add empty string if not applicable
+#   alert_pubsub_topic: ""  # Add empty string if not applicable
+#   monitoring_notification_channels: []  # Add an empty list if not applicable
+
+
+# - billing_account: "01EBA6-74BB59-078C79"
+#   projects:
+#     - "curious-ivy-406409"
+#   create_budget: true
+#   display_name: "My Project 37632 "
+#   project_prefix: "" # Add project_prefix here
+#   alert_spent_percents:
+#     - 60
+#     - 80
+#   alert_spend_basis: "CURRENT_SPEND"
+#   currency_code: "USD"
+#   budget_amount_sandbox: "500"
+#   budget_amount_default: "5000"
+#   credit_types_treatment: "INCLUDE_ALL_CREDITS"
+#   labels:
+#     label3: ""
+#     #label4: ""
+#   services: []  # Add an empty list for services if not applicable
+#   calendar_period: ""  # Add empty string for calendar period if not applicable
+#   custom_period_start_date: ""  # Add empty string if not applicable
+#   custom_period_end_date: ""  # Add empty string if not applicable
+#   alert_pubsub_topic: ""  # Add empty string if not applicable
+#   monitoring_notification_channels: []  # Add an empty list if not applicable

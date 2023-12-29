@@ -1,0 +1,86 @@
+repositories:
+  gcp-lz-terraform-test-repo:
+    visibility: "public"
+    description: "This is the first project."
+    auto_init: true
+    homepage_url: "https://example.com/project1"
+    has_projects: true
+    has_issues: true
+    has_wiki: true
+    is_template: true
+    allow_merge_commit: true
+    allow_squash_merge: true
+    allow_rebase_merge: false
+    allow_auto_merge: false
+    delete_branch_on_merge: true
+    has_downloads: false
+    gitignore_template: "Node"
+    license_template: "mit"
+    archived: false
+    archived_on_destroy: false
+    default_branch: "main"
+    permission: "admin"
+    topics:
+      - "terraform"
+      - "github"
+    vulnerability_alert: true
+    ignore_vulnerability_alerts_during_read: false
+    pages:
+      - cname: "custom-domain.example.com"
+        source:
+          - branch: "main"
+            path: "/"
+      - cname: "another-domain.example.com"
+        source:
+          - branch: "develop"
+            path: "/docs"
+    template:
+      - owner: "XBankGCPOrg"
+        repository: "gcp-lz-foundations"
+
+branch_protection:
+  main:
+    branch:
+      - main
+    require_signed_commits: true
+    enforce_admins: false
+    require_conversation_resolution: true
+    required_pull_request_reviews:
+      dismiss_stale_reviews: true
+      dismissal_teams:
+        - engineering
+      dismissal_users:
+        - user1
+        - user2
+      include_admins: false
+      require_code_owner_reviews: true
+      required_approving_review_count: 2
+    required_status_checks:
+      contexts:
+        - ci/build
+        - ci/test
+      include_admins: true
+      strict: false
+    restrictions:
+      apps:
+        - github-actions
+      teams:
+        - engineering
+      users:
+        - user3
+        - user4
+
+teams:
+  gcp-lz-terraform-test-repo:
+    privacy: "closed"
+    parent_team_name: "gcp-lz-admin"
+    description: "Team for admin"
+    ldap_dn: ""
+    create_default_maintainer: "true"
+
+
+OWNER: narayan-khanna
+CMDB_ID: 2
+FOLDER_NAME: fldr-common
+
+

@@ -1,0 +1,34 @@
+name: Image Build and Push to GAR pipeline
+on: 
+  workflow_dispatch:
+jobs:
+  build_push_image_gar:
+    name: Build and Push image to GAR with workload identity
+    runs-on: ubuntu-latest
+    permissions: # <- this section is needed for workload identity
+      contents: 'read'
+      id-token: 'write'
+    steps:
+      - uses: actions/checkout@v3
+      - name: Authenticate to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v0
+        with:
+          token_format: access_token
+          workload_identity_provider: projects/1084526730958/locations/global/workloadIdentityPools/github-b-control-pool/providers/github-b-control-provider
+          service_account: sa-control@prj-lz-seed-t99o.iam.gserviceaccount.com
+          access_token_lifetime: 3600s
+      - name: Login to Artifact Registry
+        uses: docker/login-action@v1
+        with:
+          registry: europe-west2-docker.pkg.dev
+          username: oauth2accesstoken
+          password: ${{ steps.auth.outputs.access_token }}
+      - id: docker-push-tagged
+        name: Tag Docker image and push to Google Artifact Registry
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+          file: ./03-image/Dockerfile
+          tags: |
+             europe-west2-docker.pkg.dev/prj-c-platformtools-ar-06h2/ar-prj-c-platformtools-ar-06h2-application/sample-image:v0.0.1

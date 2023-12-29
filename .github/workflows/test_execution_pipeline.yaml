@@ -1,0 +1,54 @@
+name: ""
+on:
+  workflow_call:
+    inputs:
+      workload-identity-provider:
+        required: true
+        type: string
+      workload-identity-serviceaccount:
+        required: true
+        type: string
+jobs:
+  # labeler:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
+
+  #     - name: Apply labels
+  #       uses: actions/labeler@v2
+  #       with:
+  #         repo-token: ${{ secrets.GITHUB_TOKEN }}
+  #         configuration-path: .github/labeler.yml
+  terratest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Authenticate to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v0
+        with:
+          #replace project id, provider id and pool id here
+          #workload_identity_provider: projects/<project-id>/locations/global/workloadIdentityPools/<pool-id>/providers/<provider-id>
+          workload_identity_provider: ${{ inputs.workload-identity-provider }}
+#          service_account: <org-terrafomr@sa>
+#          replace service account here
+          service_account: ${{ inputs.workload-identity-serviceaccount }}
+          access_token_lifetime: 3600s
+      - uses: actions/setup-go@v1
+        with:
+          go-version: 1.21.3
+      - uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_wrapper: false
+      - name: Download Go Modules
+        working-directory: terratest/test
+        run: go mod download
+      - name: Terraform version
+        working-directory: terratest/test
+        run: |
+          terraform --version
+      - name: Run Go Tests
+        working-directory: terratest/test
+        run: |
+          go test -v -timeout 30m

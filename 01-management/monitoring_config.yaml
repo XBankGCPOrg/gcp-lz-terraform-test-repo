@@ -1,0 +1,292 @@
+monitoring_config:
+  - project_id: "prj-s-my-test-project-85526"
+    cpu_metric_display_name: "CPU Utilization"
+    cpu_metric_description: "Monitor CPU usage"
+    cpu_metric_kind: "GAUGE"
+    cpu_metric_value_type: "DOUBLE"
+    cpu_metric_unit: "1"
+    cpu_metric_metric_type: "custom.googleapis.com/cpu/utilization"
+  
+    memory_display_name: "Memory Utilization"
+    memory_description: "Monitor memory usage"
+    memory_metric_kind: "GAUGE"
+    memory_value_type: "DOUBLE"
+    memory_unit: "By"
+    memory_type: "custom.googleapis.com/memory/usage"
+
+    iops_display_name: "IOPS"
+    iops_description: "Monitor IOPS"
+    iops_metric_kind: "GAUGE"
+    iops_value_type: "INT64"
+    iops_unit: "IOPS"
+    iops_type: "custom.googleapis.com/iops/utilization"
+
+    api_requests_display_name: "API Requests"
+    api_requests_description: "Monitor API requests"
+    api_requests_metric_kind: "GAUGE"
+    api_requests_value_type: "INT64"
+    api_requests_unit: "requests"
+    api_requests_type: "custom.googleapis.com/api/requests"
+
+    bandwidth_display_name: "Bandwidth Usage"
+    bandwidth_description: "Monitor bandwidth usage"
+    bandwidth_metric_metric_kind: "GAUGE"
+    bandwidth_metric_value_type: "INT64"
+    bandwidth_metric_unit: "By/s"
+    bandwidth_metric_type: "custom.googleapis.com/bandwidth/usage"
+
+    high_cpu_alert_display_name: "High CPU Alert"
+    high_cpu_alert_combiner: "OR"
+    high_cpu_alert_conditions_display_name: "High CPU Utilization"
+    high_cpu_alert_filter:  "metric.type=\"custom.googleapis.com/cpu/utilization\" AND resource.type=\"gce_instance\"" 
+    high_cpu_alert_comparison: "COMPARISON_GT"
+    high_cpu_alert_threshold_value: 80
+    high_cpu_alert_duration: "60s"
+    high_cpu_alert_alignment_period: "60s"
+    high_cpu_alert_per_series_aligner: "ALIGN_NONE"
+   
+    memory_alert_display_name: "Memory Alert"
+    memory_alert_combiner: "OR"
+    memory_alert_conditions_display_name: "High Memory Utilization"
+    memory_alert_filter: "metric.type=\"custom.googleapis.com/memory/usage\" AND resource.type=\"gce_instance\"" 
+    memory_alert_comparison: "COMPARISON_GT"
+    memory_alert_threshold_value: 90
+    memory_alert_duration: "60s"
+    memory_alert_alignment_period: "60s"
+    memory_alert_per_series_aligner: "ALIGN_NONE" 
+    
+
+    iops_alert_display_name: "IOPS Alert"
+    iops_alert_combiner: "OR"
+    iops_alert_conditions_display_name: "High IOPS"
+    iops_alert_filter: "metric.type=\"custom.googleapis.com/iops/utilization\" AND resource.type=\"gce_instance\"" 
+    iops_alert_comparison: "COMPARISON_GT"
+    iops_alert_threshold_value: 10000
+    iops_alert_duration: "60s"
+    iops_alert_alignment_period: "60s"
+    iops_alert_per_series_aligner: "ALIGN_NONE" 
+    
+
+    api_requests_alert_display_name: "API Requests Alert"
+    api_requests_alert_combiner: "OR"
+    api_requests_alert_conditions_display_name: "High API Requests"
+    api_requests_alert_filter: "metric.type=\"custom.googleapis.com/api/requests\" AND resource.type=\"gae_instance\""
+    api_requests_alert_comparison: "COMPARISON_GT"
+    api_requests_alert_threshold_value: 1000
+    api_requests_alert_duration: "60s"
+    api_requests_alert_alignment_period: "60s"
+    api_requests_alert_per_series_aligner: "ALIGN_NONE"
+    
+
+    bandwidth_alert_display_name: "Bandwidth Alert"
+    bandwidth_alert_combiner: "OR"
+    bandwidth_alert_conditions_display_name: "High Bandwidth Usage"
+    bandwidth_alert_filter: "metric.type=\"custom.googleapis.com/bandwidth/usage\" AND resource.type=\"global\""
+    bandwidth_alert_comparison: "COMPARISON_GT"
+    bandwidth_alert_threshold_value: 1000000
+    bandwidth_alert_duration: "60s"
+    bandwidth_alert_alignment_period: "60s"
+    bandwidth_alert_per_series_aligner: "ALIGN_NONE" 
+    
+
+    email_notification_display_name: "Email Notification Channel"
+    email_notification_address: "s@example.com"
+
+   # monitoring_notification_channels:
+   #    - "projects/prj-s-my-test-project-85526/notificationChannels/4019252877637351734"
+       # This i had created as a Channel in the console first, so you may need to replace with yours.
+       # 4019252877637351734 is the channel id from the url for "email" as the channel type.
+       # Add more channels as needed
+
+  - project_id: "weighty-tensor-406407"
+    cpu_metric_display_name: "CPU Utilization"
+    cpu_metric_description: "Monitor CPU usage"
+    cpu_metric_kind: "GAUGE"
+    cpu_metric_value_type: "DOUBLE"
+    cpu_metric_unit: "1"
+    cpu_metric_metric_type: "custom.googleapis.com/cpu/utilization"
+  
+    memory_display_name: "Memory Utilization"
+    memory_description: "Monitor memory usage"
+    memory_metric_kind: "GAUGE"
+    memory_value_type: "DOUBLE"
+    memory_unit: "By"
+    memory_type: "custom.googleapis.com/memory/usage"
+
+    iops_display_name: "IOPS"
+    iops_description: "Monitor IOPS"
+    iops_metric_kind: "GAUGE"
+    iops_value_type: "INT64"
+    iops_unit: "IOPS"
+    iops_type: "custom.googleapis.com/iops/utilization"
+
+    api_requests_display_name: "API Requests"
+    api_requests_description: "Monitor API requests"
+    api_requests_metric_kind: "GAUGE"
+    api_requests_value_type: "INT64"
+    api_requests_unit: "requests"
+    api_requests_type: "custom.googleapis.com/api/requests"
+
+    bandwidth_display_name: "Bandwidth Usage"
+    bandwidth_description: "Monitor bandwidth usage"
+    bandwidth_metric_metric_kind: "GAUGE"
+    bandwidth_metric_value_type: "INT64"
+    bandwidth_metric_unit: "By/s"
+    bandwidth_metric_type: "custom.googleapis.com/bandwidth/usage"
+
+    high_cpu_alert_display_name: "High CPU Alert"
+    high_cpu_alert_combiner: "OR"
+    high_cpu_alert_conditions_display_name: "High CPU Utilization"
+    high_cpu_alert_filter:  "metric.type=\"custom.googleapis.com/cpu/utilization\" AND resource.type=\"gce_instance\"" 
+    high_cpu_alert_comparison: "COMPARISON_GT"
+    high_cpu_alert_threshold_value: 80
+    high_cpu_alert_duration: "60s"
+    high_cpu_alert_alignment_period: "60s"
+    high_cpu_alert_per_series_aligner: "ALIGN_NONE"
+    
+    memory_alert_display_name: "Memory Alert"
+    memory_alert_combiner: "OR"
+    memory_alert_conditions_display_name: "High Memory Utilization"
+    memory_alert_filter: "metric.type=\"custom.googleapis.com/memory/usage\" AND resource.type=\"gce_instance\"" 
+    memory_alert_comparison: "COMPARISON_GT"
+    memory_alert_threshold_value: 90
+    memory_alert_duration: "60s"
+    memory_alert_alignment_period: "60s"
+    memory_alert_per_series_aligner: "ALIGN_NONE"
+    
+
+    iops_alert_display_name: "IOPS Alert"
+    iops_alert_combiner: "OR"
+    iops_alert_conditions_display_name: "High IOPS"
+    iops_alert_filter: "metric.type=\"custom.googleapis.com/iops/utilization\" AND resource.type=\"gce_instance\"" 
+    iops_alert_comparison: "COMPARISON_GT"
+    iops_alert_threshold_value: 10000
+    iops_alert_duration: "60s"
+    iops_alert_alignment_period: "60s"
+    iops_alert_per_series_aligner: "ALIGN_NONE"
+    
+
+    api_requests_alert_display_name: "API Requests Alert"
+    api_requests_alert_combiner: "OR"
+    api_requests_alert_conditions_display_name: "High API Requests"
+    api_requests_alert_filter: "metric.type=\"custom.googleapis.com/api/requests\" AND resource.type=\"gae_instance\""
+    api_requests_alert_comparison: "COMPARISON_GT"
+    api_requests_alert_threshold_value: 1000
+    api_requests_alert_duration: "60s"
+    api_requests_alert_alignment_period: "60s"
+    api_requests_alert_per_series_aligner: "ALIGN_NONE"
+    
+
+    bandwidth_alert_display_name: "Bandwidth Alert"
+    bandwidth_alert_combiner: "OR"
+    bandwidth_alert_conditions_display_name: "High Bandwidth Usage"
+    bandwidth_alert_filter: "metric.type=\"custom.googleapis.com/bandwidth/usage\" AND resource.type=\"global\""
+    bandwidth_alert_comparison: "COMPARISON_GT"
+    bandwidth_alert_threshold_value: 1000000
+    bandwidth_alert_duration: "60s"
+    bandwidth_alert_alignment_period: "60s"
+    bandwidth_alert_per_series_aligner: "ALIGN_NONE"
+    
+
+    email_notification_display_name: "Email Notification Channel"
+    email_notification_address: "your_email@example.com"  #Add your DL/email id here to notify on 
+
+    # monitoring_notification_channels:
+      
+    #    - "projects/weighty-tensor-406407/notificationChannels/16317466442283650995" 
+      
+
+  #   # Configuration for the second project goes here following the same structure as above
+  #   # ...
+  - project_id: "prj-n-budget-test-8yfy"
+    cpu_metric_display_name: "CPU Utilization"
+    cpu_metric_description: "Monitor CPU usage"
+    cpu_metric_kind: "GAUGE"
+    cpu_metric_value_type: "DOUBLE"
+    cpu_metric_unit: "1"
+    cpu_metric_metric_type: "custom.googleapis.com/cpu/utilization"
+  
+    memory_display_name: "Memory Utilization"
+    memory_description: "Monitor memory usage"
+    memory_metric_kind: "GAUGE"
+    memory_value_type: "DOUBLE"
+    memory_unit: "By"
+    memory_type: "custom.googleapis.com/memory/usage"
+
+    iops_display_name: "IOPS"
+    iops_description: "Monitor IOPS"
+    iops_metric_kind: "GAUGE"
+    iops_value_type: "INT64"
+    iops_unit: "IOPS"
+    iops_type: "custom.googleapis.com/iops/utilization"
+
+    api_requests_display_name: "API Requests"
+    api_requests_description: "Monitor API requests"
+    api_requests_metric_kind: "GAUGE"
+    api_requests_value_type: "INT64"
+    api_requests_unit: "requests"
+    api_requests_type: "custom.googleapis.com/api/requests"
+
+    bandwidth_display_name: "Bandwidth Usage"
+    bandwidth_description: "Monitor bandwidth usage"
+    bandwidth_metric_metric_kind: "GAUGE"
+    bandwidth_metric_value_type: "INT64"
+    bandwidth_metric_unit: "By/s"
+    bandwidth_metric_type: "custom.googleapis.com/bandwidth/usage"
+
+    high_cpu_alert_display_name: "High CPU Alert"
+    high_cpu_alert_combiner: "OR"
+    high_cpu_alert_conditions_display_name: "High CPU Utilization"
+    high_cpu_alert_filter:  "metric.type=\"custom.googleapis.com/cpu/utilization\" AND resource.type=\"gce_instance\"" 
+    high_cpu_alert_comparison: "COMPARISON_GT"
+    high_cpu_alert_threshold_value: 80
+    high_cpu_alert_duration: "60s"
+    high_cpu_alert_alignment_period: "60s"
+    high_cpu_alert_per_series_aligner: "ALIGN_NONE"
+    
+    memory_alert_display_name: "Memory Alert"
+    memory_alert_combiner: "OR"
+    memory_alert_conditions_display_name: "High Memory Utilization"
+    memory_alert_filter: "metric.type=\"custom.googleapis.com/memory/usage\" AND resource.type=\"gce_instance\"" 
+    memory_alert_comparison: "COMPARISON_GT"
+    memory_alert_threshold_value: 90
+    memory_alert_duration: "60s"
+    memory_alert_alignment_period: "60s"
+    memory_alert_per_series_aligner: "ALIGN_NONE"
+    
+
+    iops_alert_display_name: "IOPS Alert"
+    iops_alert_combiner: "OR"
+    iops_alert_conditions_display_name: "High IOPS"
+    iops_alert_filter: "metric.type=\"custom.googleapis.com/iops/utilization\" AND resource.type=\"gce_instance\"" 
+    iops_alert_comparison: "COMPARISON_GT"
+    iops_alert_threshold_value: 10000
+    iops_alert_duration: "60s"
+    iops_alert_alignment_period: "60s"
+    iops_alert_per_series_aligner: "ALIGN_NONE"
+    
+
+    api_requests_alert_display_name: "API Requests Alert"
+    api_requests_alert_combiner: "OR"
+    api_requests_alert_conditions_display_name: "High API Requests"
+    api_requests_alert_filter: "metric.type=\"custom.googleapis.com/api/requests\" AND resource.type=\"gae_instance\""
+    api_requests_alert_comparison: "COMPARISON_GT"
+    api_requests_alert_threshold_value: 1000
+    api_requests_alert_duration: "60s"
+    api_requests_alert_alignment_period: "60s"
+    api_requests_alert_per_series_aligner: "ALIGN_NONE"
+    
+
+    bandwidth_alert_display_name: "Bandwidth Alert"
+    bandwidth_alert_combiner: "OR"
+    bandwidth_alert_conditions_display_name: "High Bandwidth Usage"
+    bandwidth_alert_filter: "metric.type=\"custom.googleapis.com/bandwidth/usage\" AND resource.type=\"global\""
+    bandwidth_alert_comparison: "COMPARISON_GT"
+    bandwidth_alert_threshold_value: 1000000
+    bandwidth_alert_duration: "60s"
+    bandwidth_alert_alignment_period: "60s"
+    bandwidth_alert_per_series_aligner: "ALIGN_NONE"
+    
+
+    email_notification_display_name: "Monitoring test Notification Channel"
+    email_notification_address: "test@example.com"

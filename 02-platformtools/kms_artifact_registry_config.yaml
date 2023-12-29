@@ -1,0 +1,29 @@
+#Centralized Artifact registry
+
+artifact_registry:
+- name: application
+  description: "app ar"
+  project: prj-c-platformtools-ar
+  kms:
+    kms_location: europe-west2
+    kms_project: prj-c-platformtools
+  location: europe-west2
+
+
+#Centralized kms key and key ring creation
+
+centralized_kms:
+-   name: prj-c-platformtools
+    project: prj-c-platformtools
+    location: europe-west2
+    rotation_period: 7776000s
+    destroy_scheduled_duration: 7776000s
+    services:
+    - artifactregistry.googleapis.com
+-   name: prj-c-platformtools-ar
+    project: prj-c-platformtools
+    location: europe-west2
+    rotation_period: 7776000s
+    destroy_scheduled_duration: 7776000s
+    services:
+    - artifactregistry.googleapis.com 

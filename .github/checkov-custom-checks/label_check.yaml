@@ -1,0 +1,17 @@
+#definition block
+define: &definition
+  cond_type: "attribute"
+  resource_types:
+  - "google_project"
+  operator: exists
+
+metadata:
+  id: "CKV_CUSTOM_1"
+  name: "Ensure labels are added"
+  category: "CONVENTION"
+definition:
+  and:
+  - <<: *definition
+    attribute: "labels.cmdb"
+  - <<: *definition
+    attribute: "labels.env"

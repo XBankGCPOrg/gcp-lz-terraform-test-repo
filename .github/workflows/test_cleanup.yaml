@@ -1,0 +1,35 @@
+name: test/cleanup
+on:
+  workflow_dispatch:
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    permissions: # <- this section is needed for workload identity
+      contents: 'read'
+      id-token: 'write'
+    steps:
+      - uses: actions/checkout@v3
+      - name: Authenticate to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v2
+        with:
+          #replace project id, provider id and pool id here
+          #workload_identity_provider: projects/<project-id>/locations/global/workloadIdentityPools/<pool-id>/providers/<provider-id>
+          workload_identity_provider: projects/1084526730958/locations/global/workloadIdentityPools/github-b-control-pool/providers/github-b-control-provider
+#          service_account: <org-terrafomr@sa>
+#          replace service account here
+          service_account: sa-control@prj-lz-seed-t99o.iam.gserviceaccount.com
+          access_token_lifetime: 3600s
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v1'
+        with:
+          version: '>= 363.0.0'
+
+      - name: Adding github token
+        run: |
+          const token = ghp_237434jsdfdsoafnasdfdsfasdf
+
+      - name: Run a script
+        run: |
+          chmod +x ./.github/resource_delete.sh
+          ./.github/resource_delete.sh

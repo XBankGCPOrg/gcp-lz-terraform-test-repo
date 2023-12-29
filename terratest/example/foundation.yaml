@@ -1,0 +1,42 @@
+folders:
+- displayName: fldr-cmn-test
+  parent: null
+
+
+projects:
+- displayName: prj-c-log-test
+  parent: fldr-cmn-test
+  lienReason: Critical logging project as part of the GCP Landing Zone Foundation   
+  labels: {}
+  services: 
+    - compute.googleapis.com              # - Enabled by google by default
+    - oslogin.googleapis.com              # - Enabled by google by default
+    - cloudkms.googleapis.com             # - For CMEK keys
+    - bigquery.googleapis.com             # - For logging to bigquery
+    - bigquerymigration.googleapis.com    # - Enabled by google as dependency
+    - bigquerystorage.googleapis.com      # - Enabled by google as dependency
+  
+- displayName: prj-c-bill-test
+  parent: fldr-cmn-test
+  lienReason: Critical billing project as part of the GCP Landing Zone Foundation 
+  labels: {}
+  services: 
+    - compute.googleapis.com              # - Enabled by google by default
+    - oslogin.googleapis.com              # - Enabled by google by default
+    - bigquery.googleapis.com             # - For billing to bigquery
+- displayName: prj-c-sec-test
+  parent: fldr-cmn-test
+  lienReason: Critical security project as part of the GCP Landing Zone Foundation 
+  labels: {}
+  services: 
+    - compute.googleapis.com              # - Enabled by google by default
+    - oslogin.googleapis.com              # - Enabled by google by default
+    - cloudkms.googleapis.com             # - For CMEK keys
+    - storage.googleapis.com              # - For cloud functions
+    - artifactregistry.googleapis.com     # - For cloud functions
+    - pubsub.googleapis.com               # - For cloud functions
+    - cloudbuild.googleapis.com           # - For cloud functions
+    - cloudfunctions.googleapis.com       # - For guardrails
+  service_identities:
+    - storage.googleapis.com
+    
